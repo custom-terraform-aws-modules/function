@@ -64,29 +64,3 @@ run "valid_vpc_config" {
     }
   }
 }
-
-run "invalid_tags" {
-  command = plan
-
-  variables {
-    identifier = "test"
-
-    tags = {
-      Name = "Foo"
-    }
-  }
-
-  expect_failures = [var.tags]
-}
-
-run "valid_tags" {
-  command = plan
-
-  variables {
-    identifier = "test"
-
-    tags = {
-      Project = "Foo"
-    }
-  }
-}

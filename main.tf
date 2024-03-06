@@ -17,10 +17,7 @@ resource "aws_iam_role" "main" {
   name               = "${var.identifier}-ServiceRoleForLambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
-  tags = merge(
-    { "Name" = var.name },
-    var.tags
-  )
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "import" {
@@ -50,10 +47,7 @@ resource "aws_iam_policy" "vpc" {
   name   = "${var.identifier}-AssignSelfToVPC"
   policy = data.aws_iam_policy_document.vpc[0].json
 
-  tags = merge(
-    { "Name" = var.name },
-    var.tags
-  )
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "vpc" {
@@ -81,10 +75,7 @@ resource "aws_iam_policy" "log" {
   name   = "${var.identifier}-CloudWatchCreateLog"
   policy = data.aws_iam_policy_document.log[0].json
 
-  tags = merge(
-    { "Name" = var.name },
-    var.tags
-  )
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "log" {
@@ -103,10 +94,7 @@ resource "aws_ecr_repository" "main" {
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
-  tags = merge(
-    { "Name" = var.name },
-    var.tags
-  )
+  tags = var.tags
 }
 
 ################################
@@ -133,8 +121,5 @@ resource "aws_lambda_function" "main" {
     }
   }
 
-  tags = merge(
-    { "Name" = var.name },
-    var.tags
-  )
+  tags = var.tags
 }

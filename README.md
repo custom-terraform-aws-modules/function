@@ -21,18 +21,17 @@ This module provides a Lambda function which logs to CloudWatch. If no image URI
 
 ## Inputs
 
-| Name          | Description                                                                                           | Type           | Default | Required |
-| ------------- | ----------------------------------------------------------------------------------------------------- | -------------- | ------- | :------: |
-| identifier    | Unique identifier to differentiate global resources.                                                  | `string`       | n/a     |   yes    |
-| name          | Name of this module, which is used as identifier on all resources.                                    | `string`       | ""      |    no    |
-| policies      | List of IAM policy ARNs for the Lambda's IAM role.                                                    | `list(string)` | []      |    no    |
-| vpc_config    | Object to define the subnets and security groups for the Lambda function.                             | `object`       | null    |    no    |
-| log           | A flag for make the Lambda function submit logs to CloudWatch.                                        | `bool`         | false   |    no    |
-| image_uri     | URI of the image which will be pulled by the Lambda function to execute.                              | `string`       | ""      |    no    |
-| memory_size   | Amount of memory in MB the Lambda function can use at runtime.                                        | `number`       | 128     |    no    |
-| timeout       | Amount of time the Lambda function has to run in seconds.                                             | `number`       | 3       |    no    |
-| env_variables | A map of environment variables for the Lambda function at runtime.                                    | `map(string)`  | {}      |    no    |
-| tags          | A map of tags to add to all resources. Name is always set as tag and the other tags will be appended. | `map(string)`  | {}      |    no    |
+| Name          | Description                                                               | Type           | Default | Required |
+| ------------- | ------------------------------------------------------------------------- | -------------- | ------- | :------: |
+| identifier    | Unique identifier to differentiate global resources.                      | `string`       | n/a     |   yes    |
+| policies      | List of IAM policy ARNs for the Lambda's IAM role.                        | `list(string)` | []      |    no    |
+| vpc_config    | Object to define the subnets and security groups for the Lambda function. | `object`       | null    |    no    |
+| log           | A flag for make the Lambda function submit logs to CloudWatch.            | `bool`         | false   |    no    |
+| image_uri     | URI of the image which will be pulled by the Lambda function to execute.  | `string`       | ""      |    no    |
+| memory_size   | Amount of memory in MB the Lambda function can use at runtime.            | `number`       | 128     |    no    |
+| timeout       | Amount of time the Lambda function has to run in seconds.                 | `number`       | 3       |    no    |
+| env_variables | A map of environment variables for the Lambda function at runtime.        | `map(string)`  | {}      |    no    |
+| tags          | A map of tags to add to all resources.                                    | `map(string)`  | {}      |    no    |
 
 ### `vpc_config`
 
@@ -54,7 +53,6 @@ module "function" {
   source = "github.com/custom-terraform-aws-modules/function"
 
   identifier = "example-function-dev"
-  name       = "example-function"
   policies = [
     "arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy",
     "arn:aws:iam::aws:policy/AdministratorAccess-Amplify"
