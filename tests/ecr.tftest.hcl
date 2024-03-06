@@ -12,12 +12,12 @@ run "without_repository" {
 
   variables {
     identifier = "abc"
-    image_uri  = ""
+    image      = null
   }
 
   assert {
-    condition     = length(aws_ecr_repository.main) == 0
-    error_message = "ECR repository was created unexpectedly"
+    condition     = length(aws_ecr_repository.main) == 1
+    error_message = "ECR repository was not created"
   }
 }
 
@@ -26,11 +26,13 @@ run "with_repository" {
 
   variables {
     identifier = "abc"
-    image_uri  = "test.registry:latest"
+    image = {
+      uri = "test.registry:latest"
+    }
   }
 
   assert {
-    condition     = length(aws_ecr_repository.main) == 1
-    error_message = "ECR repository was not created"
+    condition     = length(aws_ecr_repository.main) == 0
+    error_message = "ECR repository was created unexpectedly"
   }
 }
