@@ -36,10 +36,12 @@ variable "log" {
   default     = false
 }
 
-variable "image_uri" {
-  description = "URI of the image which will be pulled by the Lambda function to execute."
-  type        = string
-  default     = ""
+variable "image" {
+  description = "Object of the image which will be pulled by the Lambda function to execute."
+  type = object({
+    uri = string
+  })
+  default = null
 }
 
 variable "memory_size" {

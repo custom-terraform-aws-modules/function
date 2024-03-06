@@ -89,7 +89,7 @@ resource "aws_iam_role_policy_attachment" "log" {
 ################################
 
 resource "aws_ecr_repository" "main" {
-  count                = length(var.image_uri) > 0 ? 1 : 0
+  count                = var.image == null ? 1 : 0
   name                 = "${var.identifier}-lambda"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
@@ -105,7 +105,7 @@ resource "aws_lambda_function" "main" {
   function_name = var.identifier
   package_type  = "Image"
   role          = aws_iam_role.main.arn
-  image_uri     = length(var.image_uri) > 0 ? "${aws_ecr_repository.main[0].repository_url}:latest" : var.image_uri
+  image_uri     = var.image == null ? "${aws_ecr_repository.main[0].repository_url}:latest" : try(var.image["uri"], null)
   memory_size   = var.memory_size
   timeout       = var.timeout
 
