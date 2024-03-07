@@ -48,9 +48,10 @@ This module provides a Lambda function which logs to CloudWatch. If no image URI
 
 ## Outputs
 
-| Name | Description                     |
-| ---- | ------------------------------- |
-| arn  | The ARN of the Lambda function. |
+| Name       | Description                            |
+| ---------- | -------------------------------------- |
+| arn        | The ARN of the Lambda function.        |
+| invoke_arn | The invoke ARN of the Lambda function. |
 
 ## Example
 
@@ -58,17 +59,19 @@ This module provides a Lambda function which logs to CloudWatch. If no image URI
 module "function" {
   source = "github.com/custom-terraform-aws-modules/function"
 
-  identifier = "example-function-dev"
+  identifier  = "example-function-dev"
+  memory_size = 128
+  timeout     = 3
+  log         = true
   policies = [
     "arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy",
     "arn:aws:iam::aws:policy/AdministratorAccess-Amplify"
   ]
-  log = true
+
   image = {
     uri = "test.registry:latest"
   }
-  memory_size = 128
-  timeout     = 3
+
   env_variables = {
     TEST_VAR = 3
   }
