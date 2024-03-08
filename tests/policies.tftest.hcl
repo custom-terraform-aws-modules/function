@@ -29,7 +29,7 @@ run "without_log" {
 
   variables {
     identifier = "abc"
-    log        = false
+    log_config = null
   }
 
   assert {
@@ -48,7 +48,9 @@ run "with_log" {
 
   variables {
     identifier = "abc"
-    log        = true
+    log_config = {
+      retention_in_days = 7
+    }
   }
 
   assert {

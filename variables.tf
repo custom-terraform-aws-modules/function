@@ -30,10 +30,23 @@ variable "vpc_config" {
   }
 }
 
-variable "log" {
-  description = "A flag for make the Lambda function submit logs to CloudWatch."
-  type        = bool
-  default     = false
+variable "log_config" {
+  description = "Object to define logging configuration of the Lambda function to CloudWatch."
+  type = object({
+    retention_in_days = number
+  })
+  default = null
+  validation {
+    condition = try(var.log_config["retention_in_days"], 1) == 1 || (
+      try(var.log_config["retention_in_days"], 3) == 3) || (
+      try(var.log_config["retention_in_days"], 5) == 5) || (
+      try(var.log_config["retention_in_days"], 7) == 7) || (
+      try(var.log_config["retention_in_days"], 14) == 14) || (
+      try(var.log_config["retention_in_days"], 30) == 30) || (
+      try(var.log_config["retention_in_days"], 365) == 365) || (
+    try(var.log_config["retention_in_days"], 0) == 0)
+    error_message = "Retention in days must be one of these values: 0, 1, 3, 5, 7, 14, 30, 365"
+  }
 }
 
 variable "image" {

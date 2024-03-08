@@ -1,4 +1,16 @@
 ################################
+# CloudWatch                   #
+################################
+
+resource "aws_cloudwatch_log_group" "main" {
+  count             = var.log_config != null ? 1 : 0
+  name              = "/aws/lambda/${var.identifier}"
+  retention_in_days = try(var.log_config["retention_in_days"], null)
+
+  tags = var.tags
+}
+
+################################
 # IAM Role                     #
 ################################
 
@@ -58,20 +70,19 @@ resource "aws_iam_role_policy_attachment" "vpc" {
 
 # for lambda that issues logs
 data "aws_iam_policy_document" "log" {
-  count = var.log ? 1 : 0
+  count = var.log_config != null ? 1 : 0
   statement {
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
 
-    resources = ["*"]
+    resources = [aws_cloudwatch_log_group.main[0].arn]
   }
 }
 
 resource "aws_iam_policy" "log" {
-  count  = var.log ? 1 : 0
+  count  = var.log_config != null ? 1 : 0
   name   = "${var.identifier}-CloudWatchCreateLog"
   policy = data.aws_iam_policy_document.log[0].json
 
@@ -79,7 +90,7 @@ resource "aws_iam_policy" "log" {
 }
 
 resource "aws_iam_role_policy_attachment" "log" {
-  count      = var.log ? 1 : 0
+  count      = var.log_config != null ? 1 : 0
   role       = aws_iam_role.main.name
   policy_arn = aws_iam_policy.log[0].arn
 }
@@ -118,6 +129,14 @@ resource "aws_lambda_function" "main" {
     content {
       subnet_ids         = try(var.vpc_config["subnets"], null)
       security_group_ids = try(var.vpc_config["security_groups"], null)
+    }
+  }
+
+  dynamic "logging_config" {
+    for_each = var.log_config != null ? [1] : []
+    content {
+      log_group  = aws_cloudwatch_log_group.main[0].arn
+      log_format = "Text"
     }
   }
 

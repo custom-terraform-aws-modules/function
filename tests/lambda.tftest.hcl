@@ -64,3 +64,27 @@ run "valid_vpc_config" {
     }
   }
 }
+
+run "invalid_retention_in_days" {
+  command = plan
+
+  variables {
+    identifier = "abc"
+    log_config = {
+      retention_in_days = 6
+    }
+  }
+
+  expect_failures = [var.log_config]
+}
+
+run "valid_log_config" {
+  command = plan
+
+  variables {
+    identifier = "abc"
+    log_config = {
+      retention_in_days = 365
+    }
+  }
+}
