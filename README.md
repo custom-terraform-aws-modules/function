@@ -59,6 +59,7 @@ This module provides a Lambda function which logs to CloudWatch. If no image URI
 | arn            | The ARN of the Lambda function.                                                 |
 | invoke_arn     | The invoke ARN of the Lambda function.                                          |
 | log_group_name | The name of the CloudWatch log group created for the Lambda function to log to. |
+| log_group_arn  | The ARN of the CloudWatch log group created for the Lambda function to log to.  |
 
 ## Example
 
