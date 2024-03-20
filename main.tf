@@ -4,7 +4,7 @@
 
 resource "aws_cloudwatch_log_group" "main" {
   count             = var.log_config != null ? 1 : 0
-  name              = "/aws/lambda/${var.identifier}"
+  name              = "${var.identifier}-lambda"
   retention_in_days = try(var.log_config["retention_in_days"], null)
 
   tags = var.tags
