@@ -135,7 +135,7 @@ resource "aws_lambda_function" "main" {
   dynamic "logging_config" {
     for_each = var.log_config != null ? [1] : []
     content {
-      log_group  = aws_cloudwatch_log_group.main[0].arn
+      log_group  = "${var.identifier}-lambda"
       log_format = "Text"
     }
   }
